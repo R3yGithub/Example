@@ -128,36 +128,6 @@ public class Propagation
             logger.info( "initialOrbit eccentricity: " + initialOrbit.getE() );
     
             SpacecraftState initialState = new SpacecraftState( initialOrbit );
-            
-            double[][] tolerances =
-                NumericalPropagator.tolerances( POSITION_TOLERANCE,
-                                                initialOrbit,
-                                                orbitType );
-                                                         
-            AdaptiveStepsizeIntegrator integrator =
-                new DormandPrince853Integrator( MIN_STEP,
-                                                MAX_STEP,
-                                                tolerances[0],
-                                                tolerances[1] );
-            integrator.setInitialStepSize( DEFAULT_STEP );
-                                            
-            NumericalPropagator propagator  = new NumericalPropagator( integrator );
-            propagator.setOrbitType( orbitType );
-            
-            NormalizedSphericalHarmonicsProvider provider =
-                GravityFieldFactory.getNormalizedProvider( 
-                    DEGREE,
-                    ORDER );
-                
-            ForceModel holmesFeatherstone =
-                new HolmesFeatherstoneAttractionModel(
-                    FramesFactory.getITRF( ITRFVersion.ITRF_2008, 
-                                           IERSConventions.IERS_2010,
-                                           true ),
-                    provider );
-            
-            propagator.addForceModel( holmesFeatherstone );
-            propagator.setInitialState( initialState );
 
             // Build TLE from propagator
             TLE templateTle =
@@ -180,21 +150,7 @@ public class Propagation
                          0,
                          0.0 );
             
-            PropagatorBuilder builder =
-                new TLEPropagatorBuilder(
-                    templateTle,
-                    PositionAngle.TRUE,
-                    POSITION_SCALE );
-                
-            FiniteDifferencePropagatorConverter fitter =
-                new FiniteDifferencePropagatorConverter(
-                    builder,
-                    THRESHOLD,
-                    MAX_ITERATIONS );
-                
-            fitter.convert( propagator, PROPAGATION_DURATION, (int) ( PROPAGATION_DURATION / DEFAULT_STEP ) );
-            
-            tle = ( (TLEPropagator) fitter.getAdaptedPropagator() ).getTLE();
+            tle = TLE.stateToTLE( initialState, templateTle );
 
         }
         
