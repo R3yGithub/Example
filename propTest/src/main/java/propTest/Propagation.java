@@ -89,6 +89,7 @@ public class Propagation
                 logger.info( "Using position/velocity directly as EME2000" );
             
                 posVel_eme2000 = posVel;
+                logger.info( "posVel_eme2000:\n" + posVel_eme2000 );
                 
                 break;
                 
@@ -222,7 +223,7 @@ public class Propagation
             
             TLE tle =
                 propagation.toTle(
-                    Calendar.getInstance().getTime(),
+                    tleEpoch,
                     25544,
                     posVel_eme2000,
                     RefFrame.EME2000,
