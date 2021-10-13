@@ -177,7 +177,7 @@ public class Propagation
         
         manager.addProvider( new DirectoryCrawler( orekitData ) );
         
-        // Propagate and the get TLE
+        // Create the TLE
         Propagation propagation = new Propagation();
         DateFormat  df          = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH );
         
@@ -214,7 +214,6 @@ public class Propagation
             ex.printStackTrace();
         }
         
-        // Fails on the highly eccentric polar orbit
         try
         {
             PVCoordinates posVel_eme2000 =
