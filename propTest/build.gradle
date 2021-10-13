@@ -29,7 +29,7 @@ dependencies {
 
     // This dependency is used by the application.
     implementation 'log4j:log4j:1.2.17'
-    implementation 'org.orekit:orekit:10.3'
+    implementation 'org.orekit:orekit:11.0'
     implementation 'com.google.guava:guava:30.1-jre'
 }
 
