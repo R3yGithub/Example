@@ -4,8 +4,12 @@
 package propTest;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
@@ -70,6 +74,8 @@ public class Propagation
         TLE tle = null;
 
         AbsoluteDate tleEpoch = new AbsoluteDate( epochDate, TimeScalesFactory.getUTC() );
+        
+        logger.info( "tleEpoch: " + tleEpoch );
         
         org.orekit.frames.Frame frame_eme2000 = org.orekit.frames.FramesFactory.getEME2000();
         
@@ -173,6 +179,19 @@ public class Propagation
         
         // Propagate and the get TLE
         Propagation propagation = new Propagation();
+        DateFormat  df          = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH );
+        
+        Date tleEpoch = null;
+        
+        try
+        {
+            tleEpoch = df.parse( "2021-04-26T14:33:19" );
+            logger.info( String.format( "tleEpoch: %s", df.format( tleEpoch ) ) );
+        }
+        catch ( ParseException ex )
+        {
+            ex.printStackTrace();
+        }
 
         try
         {
@@ -182,7 +201,7 @@ public class Propagation
             
             TLE tle =
                 propagation.toTle(
-                    Calendar.getInstance().getTime(),
+                    tleEpoch,
                     25544,
                     posVel_itrf2008,
                     RefFrame.ITRF2008,
